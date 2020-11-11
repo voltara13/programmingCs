@@ -2,59 +2,103 @@
 
 namespace programmingCs
 {
-    class Circle : Figures
+    [Serializable]
+    class Circle : VectorDocument
     {
-        public double x = 0, y = 0, r = 0, CircleArea, CirclePerimeter;
-        public Circle()
+        private double x, y, r, c, s, red, green, blue, alpha;
+        public Circle(double x, double y, double r, double red, double green, double blue, double alpha)
         {
-            Area();
-            Perimeter();
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha;
+            X = x;
+            Y = y;
+            R = r;
         }
-        public void Setxyr(double x1, double y1, double r1)
+        protected override void AngleEdit()
         {
-            x = x1;
-            y = y1;
-            r = r1;
+            double _x, _y;
+            _x = x;
+            _y = y;
+            x = _x * Math.Cos(Angle) - _y * Math.Sin(Angle);
+            y = _x * Math.Sin(Angle) + _y * Math.Cos(Angle);
         }
-        public void Area()
+        protected override void ScaleEdit()
         {
-            CircleArea = Math.PI * r * r;
+            double _Scale = Math.Sqrt(Scale);
+            r *= _Scale;
+            c = Math.PI * 2 * r;
+            s = Math.PI * r * r;
         }
-        public void Perimeter()
+        protected override void CenterEdit()
         {
-            CirclePerimeter = 2 * Math.PI * r;
+            x = X;
+            y = Y;
         }
-        public void MathtabPlus(double Procent)
+        protected override void ChangeFigure()
         {
-            CircleArea = CircleArea * (1 + (Procent / 100));
-            r = Math.Sqrt(CircleArea / Math.PI);
-            Perimeter();
+            while (true)
+            {
+                Console.Write("Введите координаты центра, радиус и цвет в формате 'x y r RED GREEN BLUE ALPHA'\nВВОД: ");
+                string temp = Console.ReadLine();
+                string[] splitString = temp.Split(' ');
+                if (splitString.Length == 7 &&
+                    double.TryParse(splitString[0], out double _x) &&
+                    double.TryParse(splitString[1], out double _y) &&
+                    double.TryParse(splitString[2], out double _r) &&
+                    double.TryParse(splitString[3], out double _red) &&
+                    double.TryParse(splitString[4], out double _green) &&
+                    double.TryParse(splitString[5], out double _blue) &&
+                    double.TryParse(splitString[6], out double _alpha))
+                {
+                    x = _x;
+                    y = _y;
+                    r = _r;
+                    red = _red;
+                    green = _green;
+                    blue = _blue;
+                    alpha = _alpha;
+                    break;
+                }
+                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+            }
         }
-        public void MathtabMinus(double Procent)
+        protected override void PrintDescription()
         {
-            CircleArea = CircleArea * (1 - (Procent / 100));
-            r = Math.Sqrt(CircleArea / Math.PI);
-            Perimeter();
+            Console.Write("Круг\n" +
+                          $"Центр: ({x}, {y})\n" +
+                          $"Радиус: {r}\n" +
+                          $"Длина окружности: {c}\n" +
+                          $"Площадь: {s}\n" +
+                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})");
         }
-        public void Rotating(double angle)
+        protected double X
         {
-            double x11, y11;
-            x11 = x;
-            y11 = y;
-            x = x11 * Math.Cos(angle) - y11 * Math.Sin(angle);
-            y = x11 * Math.Sin(angle) + y11 * Math.Cos(angle);
+            get => x;
+            set
+            {
+                x = value + base.X;
+                AngleEdit();
+            }
         }
-        public void PrintXYR()
+        protected double Y
         {
-            Console.WriteLine("Координаты центра круга и радиус: ({x}, {y}), r = {r}");
+            get => y;
+            set
+            {
+                y = value + base.Y;
+                AngleEdit();
+            }
         }
-        public void PrintArea()
+        protected double R
         {
-            Console.WriteLine("Площадь круга: {CircleArea}");
-        }
-        public void PrintPerimeter()
-        {
-            Console.WriteLine("Периметр круга: {CirclePerimeter}");
+            get => r;
+            set
+            {
+                r = value;
+                ScaleEdit();
+            }
         }
     }
 }

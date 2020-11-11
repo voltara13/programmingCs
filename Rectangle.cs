@@ -2,66 +2,136 @@
 
 namespace programmingCs
 {
-    class Rectangle : Figures
+    [Serializable]
+    class Rectangle : VectorDocument
     {
-        public double x1 = 0, x2 = 0, y1 = 0, y2 = 0, a = 0, RectangleArea, RectanglePerimeter;
-        public Rectangle()
+        private double x1, y1, x2, y2, d, c, s, red, green, blue, alpha;
+        private void Edit()
         {
-            a = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-            Area();
-            Perimeter();
+            d = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            c = 2 * Math.Sqrt(2) * d * d;
+            s = d * d / 2;
         }
-        public void Setxy(double x11, double y11, double x22, double y22)
+        public Rectangle(double x1, double x2, double y1, double y2, double red, double green, double blue, double alpha)
         {
-            x1 = x11;
-            y1 = y11;
-            x2 = x22;
-            y2 = y22;
-            a = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha;
+            X1 = x1;
+            X2 = x2;
+            Y1 = y1;
+            Y2 = y2;
         }
-        public void Area()
+        protected override void AngleEdit()
         {
-            RectangleArea = a * a;
+            double _x1, _y1, _x2, _y2;
+            _x1 = x1;
+            _y1 = y1;
+            _x2 = x2;
+            _y2 = y2;
+            x1 = _x1 * Math.Cos(Angle) - _y1 * Math.Sin(Angle);
+            y1 = _x1 * Math.Sin(Angle) + _y1 * Math.Cos(Angle);
+            x2 = _x2 * Math.Cos(Angle) - _y2 * Math.Sin(Angle);
+            y2 = _x2 * Math.Sin(Angle) + _y2 * Math.Cos(Angle);
         }
-        public void Perimeter()
+        protected override void ScaleEdit()
         {
-            RectanglePerimeter = a * 4;
+            double _Scale = Math.Sqrt(Scale);
+            x1 *= _Scale;
+            y1 *= _Scale;
+            x2 *= _Scale;
+            y2 *= _Scale;
         }
-        public void PrintArea()
+        protected override void CenterEdit()
         {
-            Console.WriteLine("Площадь прямоугольника: {RectangleArea}");
+            x1 = X1;
+            y1 = Y1;
+            x2 = X2;
+            y2 = Y2;
         }
-        public void PrintPerimeter()
+        protected override void ChangeFigure()
         {
-            Console.WriteLine("Периметр прямоугольника: {RectanglePerimeter}");
+            while (true)
+            {
+                Console.Write("Введите координаты крайних точек диагонали,и цвет в формате 'x1 y1 x2 y2 RED GREEN BLUE ALPHA'\nВВОД: ");
+                string temp = Console.ReadLine();
+                string[] splitString = temp.Split(' ');
+                if (splitString.Length == 8 &&
+                    double.TryParse(splitString[0], out double _x1) &&
+                    double.TryParse(splitString[1], out double _y1) &&
+                    double.TryParse(splitString[2], out double _x2) &&
+                    double.TryParse(splitString[3], out double _y2) &&
+                    double.TryParse(splitString[5], out double _red) &&
+                    double.TryParse(splitString[4], out double _green) &&
+                    double.TryParse(splitString[5], out double _blue) &&
+                    double.TryParse(splitString[6], out double _alpha))
+                {
+                    x1 = _x1;
+                    y1 = _y1;
+                    x2 = _x2;
+                    y2 = _y2;
+                    red = _red;
+                    green = _green;
+                    blue = _blue;
+                    alpha = _alpha;
+                    break;
+                }
+                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+            }
         }
-        public void PrintXY()
+        protected override void PrintDescription()
         {
-            Console.WriteLine("Координаты линии прямоугольника: ({x1}, {y1}), ({x2}, {y2})");
+            Console.Write("Четырехугольник\n" +
+                          $"Первая точка: ({x1}, {y1})\n" +
+                          $"Вторая точка: ({x2}, {y2})\n" +
+                          $"Периметр: {c}\n" +
+                          $"Площадь: {s}\n" +
+                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})");
         }
-        public void ScalePlus(double procent)
+        protected double X1
         {
-            RectangleArea = RectangleArea * (1 + procent / 100);
-            a = Math.Sqrt(RectangleArea);
-            Perimeter();
+            get => x1;
+            set
+            {
+                x1 = value + base.X;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
         }
-        public void ScaleMinus(double procent)
+        protected double Y1
         {
-            RectangleArea = RectangleArea * (1 - procent / 100);
-            a = Math.Sqrt(RectangleArea);
-            Perimeter();
+            get => y1;
+            set
+            {
+                y1 = value + base.Y;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
         }
-        public void Rotating(double angle)
+        protected double X2
         {
-            double x11, y11, x22, y22;
-            x11 = x1;
-            y11 = y1;
-            x22 = x2;
-            y22 = y2;
-            x1 = x11 * Math.Cos(angle) - y11 * Math.Sin(angle);
-            y1 = x11 * Math.Sin(angle) + y11 * Math.Cos(angle);
-            x2 = x22 * Math.Cos(angle) - y22 * Math.Sin(angle);
-            y2 = x22 * Math.Sin(angle) + y22 * Math.Cos(angle);
+            get => x2;
+            set
+            {
+                x2 = value + base.X;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
+        }
+        protected double Y2
+        {
+            get => y2;
+            set
+            {
+                y2 = value + base.Y;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
         }
     }
 }
