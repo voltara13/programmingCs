@@ -28,7 +28,6 @@ namespace programmingCs
                     break;
                 }
                 Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
-
             }
         }
         private void AddRectangle()
@@ -59,6 +58,46 @@ namespace programmingCs
         protected virtual void AngleEdit() {}
         protected virtual void CenterEdit() {}
         protected virtual void ChangeFigure() {}
+        protected double Scale
+        {
+            get => scale;
+            set
+            {
+                scale = value;
+                foreach (var element in VectorDocuments)
+                    element.ScaleEdit();
+            }
+        }
+        protected double Angle
+        {
+            get => angle;
+            set
+            {
+                angle = value;
+                foreach (var element in VectorDocuments)
+                    element.AngleEdit();
+            }
+        }
+        protected double X
+        {
+            get => x;
+            set
+            {
+                x = value;
+                foreach (var element in VectorDocuments)
+                    element.CenterEdit();
+            }
+        }
+        protected double Y
+        {
+            get => y;
+            set
+            {
+                y = value;
+                foreach (var element in VectorDocuments)
+                    element.CenterEdit();
+            }
+        }
         public void PrintDocument()
         {
             int i = 0;
@@ -181,8 +220,8 @@ namespace programmingCs
                     case 4:
                         Console.Write("Сведения о документе\n" +
                                       $"Центр документа: ({x}, {y})\n" +
-                                      $"Масштаб документа: {scale}\n" +
-                                      $"Угол поворота документа: {angle}\n" +
+                                      $"Масштаб документа: x{scale}\n" +
+                                      $"Угол поворота документа: {angle}°\n" +
                                       $"Количество фигур: {Size}\n");
                         return;
                     case 0:
@@ -200,46 +239,6 @@ namespace programmingCs
             angle = 0;
             x = 0;
             y = 0;
-        }
-        public double Scale
-        {
-            get => scale;
-            set
-            {
-                scale = value;
-                foreach (var element in VectorDocuments)
-                    element.ScaleEdit();
-            }
-        }
-        public double Angle
-        {
-            get => angle;
-            set
-            {
-                angle = value;
-                foreach (var element in VectorDocuments)
-                    element.AngleEdit();
-            }
-        }
-        public double X
-        {
-            get => x;
-            set
-            {
-                x = value;
-                foreach (var element in VectorDocuments)
-                    element.CenterEdit();
-            }
-        }
-        public double Y
-        {
-            get => y;
-            set
-            {
-                y = value;
-                foreach (var element in VectorDocuments)
-                    element.CenterEdit();
-            }
         }
         public int Size => VectorDocuments.Count;
     }
