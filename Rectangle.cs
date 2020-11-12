@@ -5,23 +5,61 @@ namespace programmingCs
     [Serializable]
     class Rectangle : VectorDocument
     {
-        private double x1, y1, x2, y2, d, c, s, red, green, blue, alpha;
+        public Rectangle()
+        {
+            ChangeFigure();
+        }
+        private int red, green, blue, alpha;
+        private double x1, y1, x2, y2, d, c, s;
+        private double X1
+        {
+            get => x1;
+            set
+            {
+                x1 = value + VectorDocument.X;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
+        }
+        private double Y1
+        {
+            get => y1;
+            set
+            {
+                y1 = value + VectorDocument.Y;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
+        }
+        private double X2
+        {
+            get => x2;
+            set
+            {
+                x2 = value + VectorDocument.X;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
+        }
+        private double Y2
+        {
+            get => y2;
+            set
+            {
+                y2 = value + VectorDocument.Y;
+                AngleEdit();
+                ScaleEdit();
+                Edit();
+            }
+        }
         private void Edit()
         {
             d = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
             c = 2 * Math.Sqrt(2) * d * d;
             s = d * d / 2;
-        }
-        public Rectangle(double x1, double x2, double y1, double y2, double red, double green, double blue, double alpha)
-        {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = alpha;
-            X1 = x1;
-            X2 = x2;
-            Y1 = y1;
-            Y2 = y2;
         }
         protected override void AngleEdit()
         {
@@ -62,10 +100,10 @@ namespace programmingCs
                     double.TryParse(splitString[1], out double _y1) &&
                     double.TryParse(splitString[2], out double _x2) &&
                     double.TryParse(splitString[3], out double _y2) &&
-                    double.TryParse(splitString[5], out double _red) &&
-                    double.TryParse(splitString[4], out double _green) &&
-                    double.TryParse(splitString[5], out double _blue) &&
-                    double.TryParse(splitString[6], out double _alpha))
+                    int.TryParse(splitString[5], out int _red) &&
+                    int.TryParse(splitString[4], out int _green) &&
+                    int.TryParse(splitString[5], out int _blue) &&
+                    int.TryParse(splitString[6], out int _alpha))
                 {
                     x1 = _x1;
                     y1 = _y1;
@@ -82,56 +120,13 @@ namespace programmingCs
         }
         protected override void PrintDescription()
         {
+            Func<double, double> rnd = _x => Math.Round(_x, 2);
             Console.Write("Четырехугольник\n" +
-                          $"Первая точка: ({x1}, {y1})\n" +
-                          $"Вторая точка: ({x2}, {y2})\n" +
-                          $"Периметр: {c}\n" +
-                          $"Площадь: {s}\n" +
+                          $"Первая точка: ({rnd(x1)}, {rnd(y1)})\n" +
+                          $"Вторая точка: ({rnd(x2)}, {rnd(y2)})\n" +
+                          $"Периметр: {rnd(c)}\n" +
+                          $"Площадь: {rnd(s)}\n" +
                           $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})");
-        }
-        protected double X1
-        {
-            get => x1;
-            set
-            {
-                x1 = value + base.X;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        protected double Y1
-        {
-            get => y1;
-            set
-            {
-                y1 = value + base.Y;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        protected double X2
-        {
-            get => x2;
-            set
-            {
-                x2 = value + base.X;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        protected double Y2
-        {
-            get => y2;
-            set
-            {
-                y2 = value + base.Y;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
         }
     }
 }

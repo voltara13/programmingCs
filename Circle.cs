@@ -5,24 +5,44 @@ namespace programmingCs
     [Serializable]
     class Circle : VectorDocument
     {
-        private double x, y, r, c, s, red, green, blue, alpha;
-        public Circle(double x, double y, double r, double red, double green, double blue, double alpha)
+        public Circle()
         {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = alpha;
-            X = x;
-            Y = y;
-            R = r;
+            ChangeFigure();
+        }
+        private int red, green, blue, alpha;
+        private double x, y, r, c, s;
+        private double X
+        {
+            get => x;
+            set
+            {
+                x = value + VectorDocument.X;
+                AngleEdit();
+            }
+        }
+        private double Y
+        {
+            get => y;
+            set
+            {
+                y = value + VectorDocument.Y;
+                AngleEdit();
+            }
+        }
+        private double R
+        {
+            get => r;
+            set
+            {
+                r = value;
+                ScaleEdit();
+            }
         }
         protected override void AngleEdit()
         {
-            double _x, _y;
-            _x = x;
-            _y = y;
-            x = _x * Math.Cos(Angle) - _y * Math.Sin(Angle);
-            y = _x * Math.Sin(Angle) + _y * Math.Cos(Angle);
+            double _x = x, _y = y, _angle = Angle * Math.PI / 180;
+            x = _x * Math.Cos(_angle) - _y * Math.Sin(_angle);
+            y = _x * Math.Sin(_angle) + _y * Math.Cos(_angle);
         }
         protected override void ScaleEdit()
         {
@@ -47,10 +67,10 @@ namespace programmingCs
                     double.TryParse(splitString[0], out double _x) &&
                     double.TryParse(splitString[1], out double _y) &&
                     double.TryParse(splitString[2], out double _r) &&
-                    double.TryParse(splitString[3], out double _red) &&
-                    double.TryParse(splitString[4], out double _green) &&
-                    double.TryParse(splitString[5], out double _blue) &&
-                    double.TryParse(splitString[6], out double _alpha))
+                    int.TryParse(splitString[3], out int _red) &&
+                    int.TryParse(splitString[4], out int _green) &&
+                    int.TryParse(splitString[5], out int _blue) &&
+                    int.TryParse(splitString[6], out int _alpha))
                 {
                     x = _x;
                     y = _y;
@@ -66,39 +86,13 @@ namespace programmingCs
         }
         protected override void PrintDescription()
         {
+            Func<double, double> rnd = _x => Math.Round(_x, 2);
             Console.Write("Круг\n" +
-                          $"Центр: ({x}, {y})\n" +
-                          $"Радиус: {r}\n" +
-                          $"Длина окружности: {c}\n" +
-                          $"Площадь: {s}\n" +
+                          $"Центр: ({rnd(x)}, {rnd(y)})\n" +
+                          $"Радиус: {rnd(r)}\n" +
+                          $"Длина окружности: {rnd(c)}\n" +
+                          $"Площадь: {rnd(s)}\n" +
                           $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})");
-        }
-        protected double X
-        {
-            get => x;
-            set
-            {
-                x = value + base.X;
-                AngleEdit();
-            }
-        }
-        protected double Y
-        {
-            get => y;
-            set
-            {
-                y = value + base.Y;
-                AngleEdit();
-            }
-        }
-        protected double R
-        {
-            get => r;
-            set
-            {
-                r = value;
-                ScaleEdit();
-            }
         }
     }
 }

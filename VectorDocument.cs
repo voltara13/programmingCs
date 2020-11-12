@@ -1,64 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace programmingCs
 {
     [Serializable]
     class VectorDocument
     {
-        private double scale = 1, angle = 0, x = 0, y = 0;
-        private List<VectorDocument> VectorDocuments = new List<VectorDocument>();
-        private void AddCircle()
-        {
-            while (true)
-            {
-                Console.Write("Введите координаты центра, радиус и цвет в формате 'x y r RED GREEN BLUE ALPHA'\nВВОД: ");
-                string temp = Console.ReadLine();
-                string[] splitString = temp.Split(' ');
-                if (splitString.Length == 7 &&
-                    double.TryParse(splitString[0], out double x) &&
-                    double.TryParse(splitString[1], out double y) &&
-                    double.TryParse(splitString[2], out double r) &&
-                    double.TryParse(splitString[3], out double red) &&
-                    double.TryParse(splitString[4], out double green) &&
-                    double.TryParse(splitString[5], out double blue) &&
-                    double.TryParse(splitString[6], out double alpha))
-                {
-                    VectorDocuments.Add(new Circle(x, y, r, red, green, blue, alpha));
-                    break;
-                }
-                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
-            }
-        }
-        private void AddRectangle()
-        {
-            while (true)
-            {
-                Console.Write("Введите координаты крайних точек диагонали,и цвет в формате 'x1 y1 x2 y2 RED GREEN BLUE ALPHA'\nВВОД: ");
-                string temp = Console.ReadLine();
-                string[] splitString = temp.Split(' ');
-                if (splitString.Length == 8 &&
-                    double.TryParse(splitString[0], out double x1) &&
-                    double.TryParse(splitString[1], out double y1) &&
-                    double.TryParse(splitString[2], out double x2) &&
-                    double.TryParse(splitString[3], out double y2) &&
-                    double.TryParse(splitString[5], out double red) &&
-                    double.TryParse(splitString[4], out double green) &&
-                    double.TryParse(splitString[5], out double blue) &&
-                    double.TryParse(splitString[6], out double alpha))
-                {
-                    VectorDocuments.Add(new Rectangle(x1, y1, x2, y2, red, green, blue, alpha));
-                    break;
-                }
-                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
-            }
-        }
+        private static double scale = 1, angle = 0, x = 0, y = 0;
+        private static List<VectorDocument> VectorDocuments = new List<VectorDocument>();
         protected virtual void PrintDescription() {}
         protected virtual void ScaleEdit() {}
         protected virtual void AngleEdit() {}
         protected virtual void CenterEdit() {}
         protected virtual void ChangeFigure() {}
-        protected double Scale
+        protected static double Scale
         {
             get => scale;
             set
@@ -68,7 +27,7 @@ namespace programmingCs
                     element.ScaleEdit();
             }
         }
-        protected double Angle
+        protected static double Angle
         {
             get => angle;
             set
@@ -78,7 +37,7 @@ namespace programmingCs
                     element.AngleEdit();
             }
         }
-        protected double X
+        protected static double X
         {
             get => x;
             set
@@ -88,7 +47,7 @@ namespace programmingCs
                     element.CenterEdit();
             }
         }
-        protected double Y
+        protected static double Y
         {
             get => y;
             set
@@ -98,7 +57,8 @@ namespace programmingCs
                     element.CenterEdit();
             }
         }
-        public void PrintDocument()
+        public static int Size => VectorDocuments.Count;
+        public static void PrintDocument()
         {
             int i = 0;
             foreach (var element in VectorDocuments)
@@ -107,7 +67,7 @@ namespace programmingCs
                 element.PrintDescription();
             }
         }
-        public void AddFigure()
+        public static void AddFigure()
         {
             while (true)
             {
@@ -121,10 +81,10 @@ namespace programmingCs
                 switch (ans)
                 {
                     case 1:
-                        AddCircle();
+                        VectorDocuments.Add(new Circle());
                         return;
                     case 2:
-                        AddRectangle();
+                        VectorDocuments.Add(new Rectangle());
                         return;
                     case 0:
                         return;
@@ -134,7 +94,7 @@ namespace programmingCs
                 }
             }
         }
-        public void SelectFigure()
+        public static void SelectFigure()
         {
             while (true)
             {
@@ -177,7 +137,7 @@ namespace programmingCs
                 }
             }
         }
-        public void EditDocument()
+        public static void EditDocument()
         {
             while (true)
             {
@@ -194,11 +154,11 @@ namespace programmingCs
                 {
                     case 1:
                         Console.Write("Новый масштаб документа: ");
-                        scale = Convert.ToDouble(Console.ReadLine());
+                        Scale = Convert.ToDouble(Console.ReadLine());
                         return;
                     case 2:
                         Console.Write("Новый угол документа: ");
-                        angle = Convert.ToDouble(Console.ReadLine());
+                        Angle = Convert.ToDouble(Console.ReadLine());
                         return;
                     case 3:
                         while (true)
@@ -210,8 +170,8 @@ namespace programmingCs
                                 double.TryParse(splitString[0], out double _x) &&
                                 double.TryParse(splitString[1], out double _y))
                             {
-                                x = _x;
-                                y = _y;
+                                X = _x;
+                                Y = _y;
                                 break;
                             }
                             Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
@@ -232,7 +192,39 @@ namespace programmingCs
                 }
             }
         }
-        public void ClearDocument()
+        public static void Serialize()
+        {
+            FieldInfo[] fields = typeof(VectorDocument).GetFields(BindingFlags.Static | BindingFlags.NonPublic);
+            object[,] a = new object[fields.Length, 2];
+            int i = 0;
+            foreach (FieldInfo field in fields)
+            {
+                a[i, 0] = field.Name;
+                a[i, 1] = field.GetValue(null);
+                i++;
+            };
+            Stream f = File.Open("serialize.dat", FileMode.Create);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(f, a);
+            f.Close();
+        }
+        public static void Deserialize()
+        {
+            FieldInfo[] fields = typeof(VectorDocument).GetFields(BindingFlags.Static | BindingFlags.NonPublic);
+            object[,] a;
+            Stream f = File.Open("serialize.dat", FileMode.Open);
+            BinaryFormatter formatter = new BinaryFormatter();
+            a = formatter.Deserialize(f) as object[,];
+            f.Close();
+            int i = 0;
+            foreach (FieldInfo field in fields)
+            {
+                if (field.Name == (a[i, 0] as string))
+                    field.SetValue(null, a[i, 1]);
+                i++;
+            };
+        }
+        public static void ClearDocument()
         {
             VectorDocuments.Clear();
             scale = 1;
@@ -240,6 +232,5 @@ namespace programmingCs
             x = 0;
             y = 0;
         }
-        public int Size => VectorDocuments.Count;
     }
 }

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using static programmingCs.VectorDocument;
 
 namespace programmingCs
 {
     class Program
     {
-        static void Menu(VectorDocument Object)
+        static void Menu()
         {
             int ans;
-            BinaryFormatter formatter = new BinaryFormatter();
             while (true)
             {
                 Console.Write("\nВЕКТОРНЫЙ ГРАФИЧЕСКИЙ РЕДАКТОР\n\n" +
@@ -24,7 +25,7 @@ namespace programmingCs
                               "'0' - Чтобы выйти из программы\n" +
                               "ВВОД: ");
                 ans = Convert.ToInt32(Console.ReadLine());
-                if ((ans == 2 || ans == 3 || ans == 5 || ans == 7) && Object.Size == 0)
+                if ((ans == 2 || ans == 3) && Size == 0)
                 {
                     Console.Write("\nСписок пуст. Выберите другой вариант вариант\n");
                     continue;
@@ -32,31 +33,25 @@ namespace programmingCs
                 switch (ans)
                 {
                     case 1:
-                        Object.AddFigure();
+                        AddFigure();
                         break;
                     case 2:
-                        Object.PrintDocument();
+                        PrintDocument();
                         break;
                     case 3:
-                        Object.SelectFigure();
+                        SelectFigure();
                         break;
                     case 4:
-                        Object.EditDocument();
+                        EditDocument();
                         break;
                     case 5:
-                        using (FileStream fs = new FileStream("serialize.dat", FileMode.OpenOrCreate))
-                        {
-                            formatter.Serialize(fs, Object);
-                        }
+                        Serialize();
                         break;
                     case 6:
-                        using (FileStream fs = new FileStream("serialize.dat", FileMode.OpenOrCreate))
-                        {
-                            Object = (VectorDocument)formatter.Deserialize(fs);
-                        }
+                        Serialize();
                         break;
                     case 7:
-                        Object.ClearDocument();
+                        ClearDocument();
                         break;
                     case 0:
                         System.Environment.Exit(0);
@@ -69,8 +64,7 @@ namespace programmingCs
         }
         static void Main()
         {
-            VectorDocument Object = new VectorDocument();
-            Menu(Object);
+            Menu();
         }
     }
 }
