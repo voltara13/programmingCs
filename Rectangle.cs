@@ -11,67 +11,19 @@ namespace programmingCs
         }
         private int red, green, blue, alpha;
         private double x1, y1, x2, y2, d, c, s;
-        private double X1
-        {
-            get => x1;
-            set
-            {
-                x1 = value + VectorDocument.X;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        private double Y1
-        {
-            get => y1;
-            set
-            {
-                y1 = value + VectorDocument.Y;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        private double X2
-        {
-            get => x2;
-            set
-            {
-                x2 = value + VectorDocument.X;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
-        private double Y2
-        {
-            get => y2;
-            set
-            {
-                y2 = value + VectorDocument.Y;
-                AngleEdit();
-                ScaleEdit();
-                Edit();
-            }
-        }
         private void Edit()
         {
             d = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-            c = 2 * Math.Sqrt(2) * d * d;
+            c = 2 * d * Math.Sqrt(2);
             s = d * d / 2;
         }
         protected override void AngleEdit()
         {
-            double _x1, _y1, _x2, _y2;
-            _x1 = x1;
-            _y1 = y1;
-            _x2 = x2;
-            _y2 = y2;
-            x1 = _x1 * Math.Cos(Angle) - _y1 * Math.Sin(Angle);
-            y1 = _x1 * Math.Sin(Angle) + _y1 * Math.Cos(Angle);
-            x2 = _x2 * Math.Cos(Angle) - _y2 * Math.Sin(Angle);
-            y2 = _x2 * Math.Sin(Angle) + _y2 * Math.Cos(Angle);
+            double _x1 = x1, _y1 = y1, _x2 = x2, _y2 = y2, _Angle = Angle * Math.PI / 180; ;
+            x1 = _x1 * Math.Cos(_Angle) - _y1 * Math.Sin(_Angle);
+            y1 = _x1 * Math.Sin(_Angle) + _y1 * Math.Cos(_Angle);
+            x2 = _x2 * Math.Cos(_Angle) - _y2 * Math.Sin(_Angle);
+            y2 = _x2 * Math.Sin(_Angle) + _y2 * Math.Cos(_Angle);
         }
         protected override void ScaleEdit()
         {
@@ -80,13 +32,14 @@ namespace programmingCs
             y1 *= _Scale;
             x2 *= _Scale;
             y2 *= _Scale;
+            Edit();
         }
         protected override void CenterEdit()
         {
-            x1 = X1;
-            y1 = Y1;
-            x2 = X2;
-            y2 = Y2;
+            x1 += Dx;
+            y1 += Dy;
+            x2 += Dx;
+            y2 += Dy;
         }
         protected override void ChangeFigure()
         {
@@ -113,6 +66,7 @@ namespace programmingCs
                     green = _green;
                     blue = _blue;
                     alpha = _alpha;
+                    Edit();
                     break;
                 }
                 Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");

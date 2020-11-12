@@ -10,7 +10,7 @@ namespace programmingCs
     [Serializable]
     class VectorDocument
     {
-        private static double scale = 1, angle = 0, x = 0, y = 0;
+        private static double scale = 1, angle = 0, x = 0, y = 0, dx, dy;
         private static List<VectorDocument> VectorDocuments = new List<VectorDocument>();
         protected virtual void PrintDescription() {}
         protected virtual void ScaleEdit() {}
@@ -37,26 +37,8 @@ namespace programmingCs
                     element.AngleEdit();
             }
         }
-        protected static double X
-        {
-            get => x;
-            set
-            {
-                x = value;
-                foreach (var element in VectorDocuments)
-                    element.CenterEdit();
-            }
-        }
-        protected static double Y
-        {
-            get => y;
-            set
-            {
-                y = value;
-                foreach (var element in VectorDocuments)
-                    element.CenterEdit();
-            }
-        }
+        public static double Dx => dx;
+        public static double Dy => dy;
         public static int Size => VectorDocuments.Count;
         public static void PrintDocument()
         {
@@ -170,8 +152,12 @@ namespace programmingCs
                                 double.TryParse(splitString[0], out double _x) &&
                                 double.TryParse(splitString[1], out double _y))
                             {
-                                X = _x;
-                                Y = _y;
+                                dx = _x - x;
+                                dy = _y - y;
+                                x = _x;
+                                y = _y;
+                                foreach (var element in VectorDocuments)
+                                    element.CenterEdit();
                                 break;
                             }
                             Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");

@@ -11,50 +11,27 @@ namespace programmingCs
         }
         private int red, green, blue, alpha;
         private double x, y, r, c, s;
-        private double X
+        private void Edit()
         {
-            get => x;
-            set
-            {
-                x = value + VectorDocument.X;
-                AngleEdit();
-            }
-        }
-        private double Y
-        {
-            get => y;
-            set
-            {
-                y = value + VectorDocument.Y;
-                AngleEdit();
-            }
-        }
-        private double R
-        {
-            get => r;
-            set
-            {
-                r = value;
-                ScaleEdit();
-            }
+            c = Math.PI * 2 * r;
+            s = Math.PI * r * r;
         }
         protected override void AngleEdit()
         {
-            double _x = x, _y = y, _angle = Angle * Math.PI / 180;
-            x = _x * Math.Cos(_angle) - _y * Math.Sin(_angle);
-            y = _x * Math.Sin(_angle) + _y * Math.Cos(_angle);
+            double _x = x, _y = y, _Angle = Angle * Math.PI / 180;
+            x = _x * Math.Cos(_Angle) - _y * Math.Sin(_Angle);
+            y = _x * Math.Sin(_Angle) + _y * Math.Cos(_Angle);
         }
         protected override void ScaleEdit()
         {
             double _Scale = Math.Sqrt(Scale);
             r *= _Scale;
-            c = Math.PI * 2 * r;
-            s = Math.PI * r * r;
+            Edit();
         }
         protected override void CenterEdit()
         {
-            x = X;
-            y = Y;
+            x += Dx;
+            y += Dy;
         }
         protected override void ChangeFigure()
         {
@@ -79,6 +56,7 @@ namespace programmingCs
                     green = _green;
                     blue = _blue;
                     alpha = _alpha;
+                    Edit();
                     break;
                 }
                 Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
