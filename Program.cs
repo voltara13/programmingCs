@@ -45,7 +45,7 @@ namespace programmingCs
                         Serialize();
                         break;
                     case 6:
-                        Serialize();
+                        Deserialize();
                         break;
                     case 7:
                         ClearDocument();

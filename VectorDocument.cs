@@ -45,7 +45,7 @@ namespace programmingCs
             int i = 0;
             foreach (var element in VectorDocuments)
             {
-                Console.Write($"{++i}. ");
+                Console.Write($"\n{++i}. ");
                 element.PrintDescription();
             }
         }

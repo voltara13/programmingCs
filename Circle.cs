@@ -70,7 +70,7 @@ namespace programmingCs
                           $"Радиус: {rnd(r)}\n" +
                           $"Длина окружности: {rnd(c)}\n" +
                           $"Площадь: {rnd(s)}\n" +
-                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})");
+                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})\n");
         }
     }
 }
