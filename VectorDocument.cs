@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 
-
 namespace programmingCs
 {
     [Serializable]
@@ -12,11 +11,11 @@ namespace programmingCs
     {
         private static double scale = 1, angle = 0, x = 0, y = 0, dx, dy;
         private static List<VectorDocument> VectorDocuments = new List<VectorDocument>();
-        protected virtual void PrintDescription() {}
-        protected virtual void ScaleEdit() {}
-        protected virtual void AngleEdit() {}
-        protected virtual void CenterEdit() {}
-        protected virtual void ChangeFigure() {}
+        protected virtual void PrintDescription() {} //Виртуальная функция вывода свойств фигуры
+        protected virtual void ScaleEdit() {} //Виртуальная функция изменения масштаба фигуры
+        protected virtual void AngleEdit() {} //Виртуальная функция изменения угла фигуры
+        protected virtual void CenterEdit() {} //Виртуальная функция изменения центра фигуры
+        protected virtual void ChangeFigure() {} //Виртуальная функция изменения свойств фигуры
         protected static double Scale
         {
             get => scale;

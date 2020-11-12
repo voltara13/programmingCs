@@ -30,28 +30,28 @@ namespace programmingCs
                 switch (ans)
                 {
                     case 1:
-                        AddFigure();
+                        AddFigure(); //Функция добавления фигуры
                         break;
                     case 2:
-                        PrintDocument();
+                        PrintDocument(); //Функция вывода всего документа
                         break;
                     case 3:
-                        SelectFigure();
+                        SelectFigure(); //Функция выбора отдельной фигуры
                         break;
                     case 4:
-                        EditDocument();
+                        EditDocument(); //Функция изменения свойств документа
                         break;
                     case 5:
-                        Serialize();
+                        Serialize(); //Функция сериализации
                         break;
                     case 6:
-                        Deserialize();
+                        Deserialize(); //Функция десериализации
                         break;
                     case 7:
-                        ClearDocument();
+                        ClearDocument(); //Функция очистки документа
                         break;
                     case 0:
-                        System.Environment.Exit(0);
+                        System.Environment.Exit(0); //Функция выхода из программы
                         break;
                     default:
                         Console.Write("\nВыбран неверный вариант. Попробуйте ещё раз\n");
