@@ -1,6 +1,8 @@
 ﻿using System;
 using static programmingCs.VectorDocument;
-
+/// <summary>
+/// //////
+/// </summary>
 namespace programmingCs
 {
     class Program
