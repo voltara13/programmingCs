@@ -3,13 +3,13 @@
 namespace programmingCs
 {
     [Serializable]
-    class Circle : VectorDocument
+    sealed class Circle : VectorDocument
     {
         public Circle()
         {
             ChangeFigure();
         }
-        private int red, green, blue, alpha;
+        private byte red, green, blue, alpha;
         private double x, y, r, c, s;
         private void Edit()
         {
@@ -38,28 +38,23 @@ namespace programmingCs
             while (true)
             {
                 Console.Write("Введите координаты центра, радиус и цвет в формате 'x y r RED GREEN BLUE ALPHA'\nВВОД: ");
-                string temp = Console.ReadLine();
-                string[] splitString = temp.Split(' ');
-                if (splitString.Length == 7 &&
-                    double.TryParse(splitString[0], out double _x) &&
-                    double.TryParse(splitString[1], out double _y) &&
-                    double.TryParse(splitString[2], out double _r) &&
-                    int.TryParse(splitString[3], out int _red) &&
-                    int.TryParse(splitString[4], out int _green) &&
-                    int.TryParse(splitString[5], out int _blue) &&
-                    int.TryParse(splitString[6], out int _alpha))
+                string[] splitString = Console.ReadLine().Split(' ');
+                try
                 {
-                    x = _x;
-                    y = _y;
-                    r = _r;
-                    red = _red;
-                    green = _green;
-                    blue = _blue;
-                    alpha = _alpha;
+                    x = Convert.ToByte(splitString[0]);
+                    y = Convert.ToByte(splitString[1]);
+                    r = Convert.ToByte(splitString[2]);
+                    red = Convert.ToByte(splitString[3]);
+                    green = Convert.ToByte(splitString[4]);
+                    blue = Convert.ToByte(splitString[5]);
+                    alpha = Convert.ToByte(splitString[6]);
                     Edit();
                     break;
                 }
-                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                catch (Exception)
+                {
+                    Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                }
             }
         }
         protected override void PrintDescription()

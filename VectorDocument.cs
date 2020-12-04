@@ -7,15 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace programmingCs
 {
     [Serializable]
-    class VectorDocument
+    abstract class VectorDocument
     {
         private static double scale = 1, angle = 0, x = 0, y = 0, dx, dy;
         private static List<VectorDocument> VectorDocuments = new List<VectorDocument>();
-        protected virtual void PrintDescription() {} //Виртуальная функция вывода свойств фигуры
-        protected virtual void ScaleEdit() {} //Виртуальная функция изменения масштаба фигуры
-        protected virtual void AngleEdit() {} //Виртуальная функция изменения угла фигуры
-        protected virtual void CenterEdit() {} //Виртуальная функция изменения центра фигуры
-        protected virtual void ChangeFigure() {} //Виртуальная функция изменения свойств фигуры
+        protected abstract void PrintDescription(); //Абстрактная функция вывода свойств фигуры
+        protected abstract void ScaleEdit(); //Абстрактная функция изменения масштаба фигуры
+        protected abstract void AngleEdit(); //Абстрактная функция изменения угла фигуры
+        protected abstract void CenterEdit(); //Абстрактная функция изменения центра фигуры
+        protected abstract void ChangeFigure(); //Абстрактная функция изменения свойств фигуры
         protected static double Scale
         {
             get => scale;

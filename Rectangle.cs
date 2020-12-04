@@ -3,13 +3,13 @@
 namespace programmingCs
 {
     [Serializable]
-    class Rectangle : VectorDocument
+    sealed class Rectangle : VectorDocument
     {
         public Rectangle()
         {
             ChangeFigure();
         }
-        private int red, green, blue, alpha;
+        private byte red, green, blue, alpha;
         private double x1, y1, x2, y2, d, c, s;
         private void Edit()
         {
@@ -46,30 +46,24 @@ namespace programmingCs
             while (true)
             {
                 Console.Write("Введите координаты крайних точек диагонали,и цвет в формате 'x1 y1 x2 y2 RED GREEN BLUE ALPHA'\nВВОД: ");
-                string temp = Console.ReadLine();
-                string[] splitString = temp.Split(' ');
-                if (splitString.Length == 8 &&
-                    double.TryParse(splitString[0], out double _x1) &&
-                    double.TryParse(splitString[1], out double _y1) &&
-                    double.TryParse(splitString[2], out double _x2) &&
-                    double.TryParse(splitString[3], out double _y2) &&
-                    int.TryParse(splitString[5], out int _red) &&
-                    int.TryParse(splitString[4], out int _green) &&
-                    int.TryParse(splitString[5], out int _blue) &&
-                    int.TryParse(splitString[6], out int _alpha))
+                string[] splitString = Console.ReadLine().Split(' ');
+                try
                 {
-                    x1 = _x1;
-                    y1 = _y1;
-                    x2 = _x2;
-                    y2 = _y2;
-                    red = _red;
-                    green = _green;
-                    blue = _blue;
-                    alpha = _alpha;
+                    x1 = Convert.ToByte(splitString[0]);
+                    y1 = Convert.ToByte(splitString[1]);
+                    x2 = Convert.ToByte(splitString[2]);
+                    y2 = Convert.ToByte(splitString[3]);
+                    red = Convert.ToByte(splitString[4]);
+                    green = Convert.ToByte(splitString[5]);
+                    blue = Convert.ToByte(splitString[6]);
+                    alpha = Convert.ToByte(splitString[7]);
                     Edit();
                     break;
                 }
-                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                catch (Exception)
+                {
+                    Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                }
             }
         }
         protected override void PrintDescription()

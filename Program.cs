@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using static programmingCs.VectorDocument;
-/// <summary>
-/// //////
-/// </summary>
+
 namespace programmingCs
 {
     class Program
@@ -63,7 +62,18 @@ namespace programmingCs
         }
         static void Main()
         {
-            Menu();
+            //Menu();
+            ArrayList myAL = new ArrayList();
+            var rand = new Random();
+            for (int i = 0; i < 5; i++)
+                myAL.Add(rand.Next(1, 10));
+            myAL.Add("Hello");
+            myAL.Remove("Hello");
+            Console.WriteLine(myAL.Count);
+            foreach (var elm in myAL)
+                Console.Write($"{elm} ");
+            myAL.Fin
+
         }
     }
 }
