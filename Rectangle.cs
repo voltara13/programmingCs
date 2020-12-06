@@ -19,19 +19,19 @@ namespace programmingCs
         }
         protected override void AngleEdit()
         {
-            double _x1 = x1, _y1 = y1, _x2 = x2, _y2 = y2, _Angle = Angle * Math.PI / 180; ;
-            x1 = _x1 * Math.Cos(_Angle) - _y1 * Math.Sin(_Angle);
-            y1 = _x1 * Math.Sin(_Angle) + _y1 * Math.Cos(_Angle);
-            x2 = _x2 * Math.Cos(_Angle) - _y2 * Math.Sin(_Angle);
-            y2 = _x2 * Math.Sin(_Angle) + _y2 * Math.Cos(_Angle);
+            double x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2, angle = Angle * Math.PI / 180; ;
+            this.x1 = x1 * Math.Cos(angle) - y1 * Math.Sin(angle);
+            this.y1 = x1 * Math.Sin(angle) + y1 * Math.Cos(angle);
+            this.x2 = x2 * Math.Cos(angle) - y2 * Math.Sin(angle);
+            this.y2 = x2 * Math.Sin(angle) + y2 * Math.Cos(angle);
         }
         protected override void ScaleEdit()
         {
-            double _Scale = Math.Sqrt(Scale);
-            x1 *= _Scale;
-            y1 *= _Scale;
-            x2 *= _Scale;
-            y2 *= _Scale;
+            double scale = Math.Sqrt(Scale);
+            x1 *= scale;
+            y1 *= scale;
+            x2 *= scale;
+            y2 *= scale;
             Edit();
         }
         protected override void CenterEdit()
@@ -66,15 +66,15 @@ namespace programmingCs
                 }
             }
         }
-        protected override void PrintDescription()
+        public override string ToString()
         {
-            Func<double, double> rnd = _x => Math.Round(_x, 2);
-            Console.Write("Четырехугольник\n" +
-                          $"Первая точка: ({rnd(x1)}, {rnd(y1)})\n" +
-                          $"Вторая точка: ({rnd(x2)}, {rnd(y2)})\n" +
-                          $"Периметр: {rnd(c)}\n" +
-                          $"Площадь: {rnd(s)}\n" +
-                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})\n");
+            Func<double, double> rnd = x => Math.Round(x, 2);
+            return "\nЧетырехугольник\n" +
+                   $"Первая точка: ({rnd(x1)}, {rnd(y1)})\n" +
+                   $"Вторая точка: ({rnd(x2)}, {rnd(y2)})\n" +
+                   $"Периметр: {rnd(c)}\n" +
+                   $"Площадь: {rnd(s)}\n" +
+                   $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})";
         }
     }
 }

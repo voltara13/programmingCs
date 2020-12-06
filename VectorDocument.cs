@@ -7,46 +7,42 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace programmingCs
 {
     [Serializable]
-    abstract class VectorDocument
+    class VectorDocument
     {
-        private static double scale = 1, angle = 0, x = 0, y = 0, dx, dy;
-        private static List<VectorDocument> VectorDocuments = new List<VectorDocument>();
-        protected abstract void PrintDescription(); //Абстрактная функция вывода свойств фигуры
-        protected abstract void ScaleEdit(); //Абстрактная функция изменения масштаба фигуры
-        protected abstract void AngleEdit(); //Абстрактная функция изменения угла фигуры
-        protected abstract void CenterEdit(); //Абстрактная функция изменения центра фигуры
-        protected abstract void ChangeFigure(); //Абстрактная функция изменения свойств фигуры
+        private static double _scale = 1, _angle = 0, _x = 0, _y = 0, _dx, _dy;
+        private static List<VectorDocument> _vectorDocuments = new List<VectorDocument>();
+        protected virtual void ScaleEdit() {} //Виртуальная функция изменения масштаба фигуры
+        protected virtual void AngleEdit() {} //Виртуальная функция изменения угла фигуры
+        protected virtual void CenterEdit() {} //Виртуальная функция изменения центра фигуры
+        protected virtual void ChangeFigure() {} //Виртуальная функция изменения свойств фигуры
         protected static double Scale
         {
-            get => scale;
+            get => _scale;
             set
             {
-                scale = value;
-                foreach (var element in VectorDocuments)
+                _scale = value;
+                foreach (var element in _vectorDocuments)
                     element.ScaleEdit();
             }
         }
         protected static double Angle
         {
-            get => angle;
+            get => _angle;
             set
             {
-                angle = value;
-                foreach (var element in VectorDocuments)
+                _angle = value;
+                foreach (var element in _vectorDocuments)
                     element.AngleEdit();
             }
         }
-        public static double Dx => dx;
-        public static double Dy => dy;
-        public static int Size => VectorDocuments.Count;
+        public static double Dx => _dx;
+        public static double Dy => _dy;
+        public static int Size => _vectorDocuments.Count;
         public static void PrintDocument()
         {
             int i = 0;
-            foreach (var element in VectorDocuments)
-            {
-                Console.Write($"\n{++i}. ");
-                element.PrintDescription();
-            }
+            foreach (var element in _vectorDocuments)
+                Console.Write($"\n{++i}. {element}");
         }
         public static void AddFigure()
         {
@@ -62,10 +58,10 @@ namespace programmingCs
                 switch (ans)
                 {
                     case 1:
-                        VectorDocuments.Add(new Circle());
+                        _vectorDocuments.Add(new Circle());
                         return;
                     case 2:
-                        VectorDocuments.Add(new Rectangle());
+                        _vectorDocuments.Add(new Rectangle());
                         return;
                     case 0:
                         return;
@@ -84,7 +80,7 @@ namespace programmingCs
                 ans1 = Convert.ToInt32(Console.ReadLine());
                 try
                 {
-                    VectorDocuments[ans1 - 1].PrintDescription();
+                    Console.WriteLine(_vectorDocuments[ans1 - 1]);
                     Console.Write("\nВведите:\n" +
                                   "'1' - Чтобы изменить параметры фигуры\n" +
                                   "'2' - Чтобы удалить фигуру\n" +
@@ -97,10 +93,10 @@ namespace programmingCs
                         switch (ans2)
                         {
                             case 1:
-                                VectorDocuments[ans1 - 1].ChangeFigure();
+                                _vectorDocuments[ans1 - 1].ChangeFigure();
                                 return;
                             case 2:
-                                VectorDocuments.Remove(VectorDocuments[ans1 - 1]);
+                                _vectorDocuments.Remove(_vectorDocuments[ans1 - 1]);
                                 return;
                             case 0:
                                 return;
@@ -122,7 +118,6 @@ namespace programmingCs
         {
             while (true)
             {
-                int ans;
                 Console.Write("\nВведите:\n" +
                               "'1' - Чтобы изменить масштаб документа\n" +
                               "'2' - Чтобы изменить угол документа\n" +
@@ -130,47 +125,50 @@ namespace programmingCs
                               "'4' - Чтобы вывести информацию о документе\n" +
                               "'0' - Чтобы выйти в меню\n" +
                               "ВВОД: ");
-                ans = Convert.ToInt32(Console.ReadLine());
+                var ans = Convert.ToInt16(Console.ReadLine());
                 switch (ans)
                 {
                     case 1:
                         Console.Write("Новый масштаб документа: ");
                         Scale = Convert.ToDouble(Console.ReadLine());
-                        return;
+                        break;
                     case 2:
                         Console.Write("Новый угол документа: ");
                         Angle = Convert.ToDouble(Console.ReadLine());
-                        return;
+                        break;
                     case 3:
                         while (true)
                         {
                             Console.Write("Новые координаты центра в формате 'x y': ");
                             string temp = Console.ReadLine();
                             string[] splitString = temp.Split(' ');
-                            if (splitString.Length == 2 &&
-                                double.TryParse(splitString[0], out double _x) &&
-                                double.TryParse(splitString[1], out double _y))
+                            try
                             {
-                                dx = _x - x;
-                                dy = _y - y;
-                                x = _x;
-                                y = _y;
-                                foreach (var element in VectorDocuments)
+                                double x = Convert.ToDouble(splitString[0]);
+                                double y = Convert.ToDouble(splitString[1]);
+                                _dx = x - VectorDocument._x;
+                                _dy = y - VectorDocument._y;
+                                VectorDocument._x = x;
+                                VectorDocument._y = y;
+                                foreach (var element in _vectorDocuments)
                                     element.CenterEdit();
                                 break;
                             }
-                            Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                            catch (Exception)
+                            {
+                                Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
+                            }
                         }
-                        return;
+                        break;
                     case 4:
                         Console.Write("Сведения о документе\n" +
-                                      $"Центр документа: ({x}, {y})\n" +
-                                      $"Масштаб документа: x{scale}\n" +
-                                      $"Угол поворота документа: {angle}°\n" +
+                                      $"Центр документа: ({_x}, {_y})\n" +
+                                      $"Масштаб документа: x{_scale}\n" +
+                                      $"Угол поворота документа: {_angle}°\n" +
                                       $"Количество фигур: {Size}\n");
-                        return;
+                        break;
                     case 0:
-                        return;
+                        break;
                     default:
                         Console.Write("\nВыбран неверный вариант. Попробуйте ещё раз\n");
                         break;
@@ -207,15 +205,15 @@ namespace programmingCs
                 if (field.Name == (a[i, 0] as string))
                     field.SetValue(null, a[i, 1]);
                 i++;
-            };
+            }
         }
         public static void ClearDocument()
         {
-            VectorDocuments.Clear();
-            scale = 1;
-            angle = 0;
-            x = 0;
-            y = 0;
+            _vectorDocuments.Clear();
+            _scale = 1;
+            _angle = 0;
+            _x = 0;
+            _y = 0;
         }
     }
 }

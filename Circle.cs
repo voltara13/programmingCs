@@ -1,13 +1,33 @@
-﻿using System;
+﻿#define EX
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace programmingCs
 {
     [Serializable]
-    sealed class Circle : VectorDocument
+    sealed class Circle : VectorDocument, IComparable<Circle>, ICloneable
     {
-        public Circle()
+        internal class SortAreaAscendingHelper : IComparer<Circle>
         {
-            ChangeFigure();
+            public int Compare(Circle x, Circle y)
+            {
+                if (ReferenceEquals(x, y)) return 0;
+                if (ReferenceEquals(null, y)) return 1;
+                if (ReferenceEquals(null, x)) return -1;
+                return x.s.CompareTo(y.s);
+            }
+        }
+        internal class SortAreaDescendingHelper : IComparer<Circle>
+        {
+            public int Compare(Circle x, Circle y)
+            {
+                if (ReferenceEquals(x, y)) return 0;
+                if (ReferenceEquals(null, y)) return 1;
+                if (ReferenceEquals(null, x)) return -1;
+                return y.s.CompareTo(x.s);
+            }
         }
         private byte red, green, blue, alpha;
         private double x, y, r, c, s;
@@ -18,14 +38,14 @@ namespace programmingCs
         }
         protected override void AngleEdit()
         {
-            double _x = x, _y = y, _Angle = Angle * Math.PI / 180;
-            x = _x * Math.Cos(_Angle) - _y * Math.Sin(_Angle);
-            y = _x * Math.Sin(_Angle) + _y * Math.Cos(_Angle);
+            double x = this.x, y = this.y, angle = Angle * Math.PI / 180;
+            this.x = x * Math.Cos(angle) - y * Math.Sin(angle);
+            this.y = x * Math.Sin(angle) + y * Math.Cos(angle);
         }
         protected override void ScaleEdit()
         {
-            double _Scale = Math.Sqrt(Scale);
-            r *= _Scale;
+            var scale = Math.Sqrt(Scale);
+            r *= scale;
             Edit();
         }
         protected override void CenterEdit()
@@ -35,6 +55,7 @@ namespace programmingCs
         }
         protected override void ChangeFigure()
         {
+#if !EX
             while (true)
             {
                 Console.Write("Введите координаты центра, радиус и цвет в формате 'x y r RED GREEN BLUE ALPHA'\nВВОД: ");
@@ -56,16 +77,66 @@ namespace programmingCs
                     Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
                 }
             }
-        }
-        protected override void PrintDescription()
+#endif
+#if EX
+            var rand = new Random();
+            x = rand.Next(-100, 101);
+            y = rand.Next(-100, 101);
+            r = rand.Next(1, 101);
+            red = Convert.ToByte(rand.Next(0, 256));
+            green = Convert.ToByte(rand.Next(0, 256));
+            blue = Convert.ToByte(rand.Next(0, 256));
+            alpha = Convert.ToByte(rand.Next(0, 256));
+            Edit();
+#endif
+        } 
+        public Circle()
         {
-            Func<double, double> rnd = _x => Math.Round(_x, 2);
-            Console.Write("Круг\n" +
-                          $"Центр: ({rnd(x)}, {rnd(y)})\n" +
-                          $"Радиус: {rnd(r)}\n" +
-                          $"Длина окружности: {rnd(c)}\n" +
-                          $"Площадь: {rnd(s)}\n" +
-                          $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})\n");
+            ChangeFigure();
+        }
+        public override string ToString()
+        {
+            Func<double, double> rnd = x => Math.Round(x, 2);
+            return "\nКруг\n" +
+                   $"Центр: ({rnd(x)}, {rnd(y)})\n" +
+                   $"Радиус: {rnd(r)}\n" +
+                   $"Длина окружности: {rnd(c)}\n" +
+                   $"Площадь: {rnd(s)}\n" +
+                   $"Цвет RGBA: ({red}, {green}, {blue}, {alpha})";
+        }
+        public object Clone() => new Circle { 
+            x = this.x,
+            y = this.y,
+            r = this.r,
+            c = this.c,
+            s = this.s,
+            red = this.red,
+            green = this.green,
+            blue = this.blue,
+            alpha = this.alpha
+        };
+        public static SortAreaAscendingHelper SortAreaAscending() => new SortAreaAscendingHelper();
+        public static SortAreaDescendingHelper SortAreaDescending() => new SortAreaDescendingHelper();
+        public int CompareTo(Circle other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return s.CompareTo(other.s);
+        }
+        public static void Circle_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //Срабатывает при добавлении элемента
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                Circle newItem = e.NewItems[0] as Circle;
+                Console.WriteLine($"\nДобавлена окружность площадью: {newItem.s}");
+            }
+            //Срабатывает при удалении элемента
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                Circle oldItem = e.OldItems[0] as Circle;
+                Console.WriteLine($"\nУдалена окружность площадью: {oldItem.s}");
+            }
         }
     }
 }
