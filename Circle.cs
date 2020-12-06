@@ -7,7 +7,7 @@ using System.Collections.Specialized;
 namespace programmingCs
 {
     [Serializable]
-    sealed class Circle : VectorDocument, IComparable<Circle>, ICloneable
+    sealed class Circle : IComparable<Circle>, ICloneable
     {
         internal class SortAreaAscendingHelper : IComparer<Circle>
         {
@@ -36,49 +36,8 @@ namespace programmingCs
             c = Math.PI * 2 * r;
             s = Math.PI * r * r;
         }
-        protected override void AngleEdit()
+        protected void ChangeFigure()
         {
-            double x = this.x, y = this.y, angle = Angle * Math.PI / 180;
-            this.x = x * Math.Cos(angle) - y * Math.Sin(angle);
-            this.y = x * Math.Sin(angle) + y * Math.Cos(angle);
-        }
-        protected override void ScaleEdit()
-        {
-            var scale = Math.Sqrt(Scale);
-            r *= scale;
-            Edit();
-        }
-        protected override void CenterEdit()
-        {
-            x += Dx;
-            y += Dy;
-        }
-        protected override void ChangeFigure()
-        {
-#if !EX
-            while (true)
-            {
-                Console.Write("Введите координаты центра, радиус и цвет в формате 'x y r RED GREEN BLUE ALPHA'\nВВОД: ");
-                string[] splitString = Console.ReadLine().Split(' ');
-                try
-                {
-                    x = Convert.ToByte(splitString[0]);
-                    y = Convert.ToByte(splitString[1]);
-                    r = Convert.ToByte(splitString[2]);
-                    red = Convert.ToByte(splitString[3]);
-                    green = Convert.ToByte(splitString[4]);
-                    blue = Convert.ToByte(splitString[5]);
-                    alpha = Convert.ToByte(splitString[6]);
-                    Edit();
-                    break;
-                }
-                catch (Exception)
-                {
-                    Console.Write("\nНеверный ввод. Попробуйте ещё раз\n");
-                }
-            }
-#endif
-#if EX
             var rand = new Random();
             x = rand.Next(-100, 101);
             y = rand.Next(-100, 101);
@@ -88,7 +47,6 @@ namespace programmingCs
             blue = Convert.ToByte(rand.Next(0, 256));
             alpha = Convert.ToByte(rand.Next(0, 256));
             Edit();
-#endif
         } 
         public Circle()
         {

@@ -9,7 +9,6 @@ EX4 - наблюдаемая коллекция пользовательског
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
 namespace programmingCs
@@ -82,7 +81,7 @@ namespace programmingCs
                 N = Convert.ToInt16(Console.ReadLine());
                 try
                 {
-                    Console.WriteLine($"Значение под индексом {N}: myDictionaryList[N]}");
+                    Console.WriteLine($"Значение под индексом {N}: {myDictionaryList[N]}");
                     break;
                 }
                 catch (Exception)
