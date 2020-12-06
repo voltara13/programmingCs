@@ -1,12 +1,9 @@
-﻿#define EX
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace programmingCs
 {
-    [Serializable]
     sealed class Circle : IComparable<Circle>, ICloneable
     {
         internal class SortAreaAscendingHelper : IComparer<Circle>
@@ -73,14 +70,14 @@ namespace programmingCs
             blue = this.blue,
             alpha = this.alpha
         };
-        public static SortAreaAscendingHelper SortAreaAscending() => new SortAreaAscendingHelper();
-        public static SortAreaDescendingHelper SortAreaDescending() => new SortAreaDescendingHelper();
         public int CompareTo(Circle other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;
             return s.CompareTo(other.s);
         }
+        public static SortAreaAscendingHelper SortAreaAscending() => new SortAreaAscendingHelper();
+        public static SortAreaDescendingHelper SortAreaDescending() => new SortAreaDescendingHelper();
         public static void Circle_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //Срабатывает при добавлении элемента
