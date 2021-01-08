@@ -12,8 +12,13 @@ namespace programmingCs
         }
         private string academicDegree;
         private string subjects;
-
         public override void print()
+        {
+            base.print();
+            Console.WriteLine($"Ученая степень: {academicDegree}\n" +
+                              $"Предмет: {subjects}");
+        }
+        public void print2()
         {
             base.print();
             Console.WriteLine($"Ученая степень: {academicDegree}\n" +

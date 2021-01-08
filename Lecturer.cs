@@ -15,5 +15,10 @@ namespace programmingCs
             base.print();
             Console.WriteLine($"Список групп: {groups}");
         }
+        public new void print2()
+        {
+            base.print();
+            Console.WriteLine($"Список групп: {groups}");
+        }
     }
 }

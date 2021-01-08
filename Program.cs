@@ -1,4 +1,6 @@
-﻿namespace programmingCs
+﻿using System;
+
+namespace programmingCs
 {
     class Program
     {
@@ -23,6 +25,12 @@
             student.print();
             teacher.print();
             lecturer.print();
+
+            teacher = lecturer; //Связывание teacher с типом Lecturer, который имеет объект lecturer
+            Console.WriteLine("Динамическое связывание");
+            teacher.print(); //Вызывается Lecturer.print
+            Console.WriteLine("Статическое связывание");
+            teacher.print2(); //Вызывается Teacher.print2
         }
     }
 }
