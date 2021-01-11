@@ -6,31 +6,21 @@ namespace programmingCs
     {
         static void Main()
         {
-            var student = new Student(
-                "Константин",
-                "Красиков",
-                "АП-927",
-                2);
-            var teacher = new Teacher(
-                "Евгений",
-                "Крыжовников",
-                "Доктор",
-                "Физика");
-            var lecturer = new Lecturer(
-                "Василий", 
-                "Петров", 
-                "Профессор", 
-                "Физика", 
-                "АП-926, АП-927");
-            student.print();
-            teacher.print();
-            lecturer.print();
+            var circle = new Circle("Синий", 4);
+            var cube = new Cube("Красный", 6.5);
 
-            teacher = lecturer; //Связывание teacher с типом Lecturer, который имеет объект lecturer
-            Console.WriteLine("Динамическое связывание");
-            teacher.print(); //Вызывается Lecturer.print
-            Console.WriteLine("Статическое связывание");
-            teacher.print2(); //Вызывается Teacher.print2
+            Console.WriteLine($"Площадь круга: {circle.volume()}");
+            Console.WriteLine($"Площадь куба: {cube.volume()}");
+
+            Shape ptr = cube;
+            Console.WriteLine($"Площадь куба: {ptr.volume()}");
+
+            //Здесь применяется динамическое связывание,
+            //так как мы используем виртуальные функции.
+            //Если мы например создадим объект типа Shape,
+            //назовем переменную ptr и присвоим ему 
+            //объект cube, то при вызове ptr.volume() вызовется именно
+            //Cube.volume()
         }
     }
 }
